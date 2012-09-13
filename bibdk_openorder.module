@@ -1,0 +1,22 @@
+<?php
+/**
+ * Implements hook_ting_client_webservice (@see ting_client.module)
+ **/
+function bibdk_openorder_ting_client_webservice () {
+  return array('openorder' => 'bibdk_openorder_url',);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter (ting_client_admin_webservices_settings)
+ * add field to webservice client settings
+ * @url to openorder
+  **/
+function bibdk_openorder_form_ting_client_admin_webservices_settings_alter (&$form,&$form_state) {
+  $form['ting']['bibdk_openorder_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Openorder URL'),
+    '#description' => t('URL to openorder e.g. http://openorder.addi.dk/'),
+    '#required' => TRUE,
+    '#default_value' => variable_get('bibdk_openorder_url', FALSE),
+  );
+}
