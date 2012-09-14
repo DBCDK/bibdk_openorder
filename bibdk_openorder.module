@@ -55,7 +55,7 @@ function bibdk_openorder_form_ting_client_admin_webservices_settings_alter (&$fo
   $form['openorder']['bibdk_openorder_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Openorder URL'),
-    '#description' => t('URL to openorder e.g. http://openorder.addi.dk/'),
+    '#description' => t('URL to openorder e.g. http://guesstimate.dbc.dk/~fvs/OpenLibrary/OpenOrder/trunk/server.php/'),
     '#required' => TRUE,
     '#default_value' => variable_get('bibdk_openorder_url', FALSE),
   );
