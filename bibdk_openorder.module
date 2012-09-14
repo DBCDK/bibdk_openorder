@@ -7,8 +7,8 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId,$pid){
   $params['action'] = 'checkOrderPolicyRequest';
 
   // testing
-  $pickupAgencyId = '715700';
-  $pid = '870970-basis:28794932';
+  //$pickupAgencyId = '715700';
+  //$pid = '870970-basis:28794932';
 
   $params['pickUpAgencyId'] = $pickupAgencyId;
   $params['pid'] = $pid;

@@ -3,7 +3,7 @@ class bibdk_openorder extends TingClientRequest{
   // for now only handle checkOrderPolicyRequest
   protected $serviceRequester;
   protected $authentication;
-  protected $pickupAgencyId;
+  protected $pickUpAgencyId;
   protected $pid;
   protected $action;
   protected $outputType;
@@ -41,11 +41,11 @@ class bibdk_openorder extends TingClientRequest{
   }
 
   public function setPickupAgencyId($value=NULL){
-    $this->pickupAgencyId = $value;
+    $this->pickUpAgencyId = $value;
   }
 
   public function getPickupAgencyId(){
-    return $this->pickupAgencyId;
+    return $this->pickUpAgencyId;
   }
 
   public function setPid($value=NULL){
@@ -60,7 +60,7 @@ class bibdk_openorder extends TingClientRequest{
   protected function getRequest() {
     $this->setParameter('action', 'borrowerCheckRequest');
 
-    $params = array('action','pickupAgencyId','serviceRequester','authentication','pid');
+    $params = array('action','pickUpAgencyId','serviceRequester','authentication','pid');
     foreach ($params as $parameter) {
       $getter = 'get' . ucfirst($parameter);
       if ($value = $this->$getter()) {
