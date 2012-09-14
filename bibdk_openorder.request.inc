@@ -1,12 +1,76 @@
 <?php
 class bibdk_openorder extends TingClientRequest{
-  // for now only handle checkOrderPolicyRequest
+  // attributes for checkOrderPolicyRequest
   protected $serviceRequester;
   protected $authentication;
   protected $pickUpAgencyId;
   protected $pid;
   protected $action;
   protected $outputType;
+  // extra attributes for placeOrderRequest
+  protected $needBeforeDate;
+  protected $orderSystem;
+  protected $userId;
+  protected $verificationReferenceSource;
+  protected $copy;
+  protected $exactEdition;
+  protected $userIdAuthenticated;
+
+  public function setUserIdAuthenticated($value=NULL){
+    $this->userIdAuthenticated = $value;
+  }
+
+  public function getUserIdAuthenticated(){
+    return $this->userIdAuthenticated;
+  }
+
+  public function setExactEdition($value=NULL){
+    $this->exactEdition=$value;
+  }
+
+  public function getExactEdition(){
+    return $this->exactEdition;
+  }
+
+  public function setCopy($value=NULL){
+    $this->copy = $value;
+  }
+
+  public function getCopy(){
+    return $this->copy;
+  }
+
+  public function setNeedBeforeDate($value=NULL){
+    $this->needBeforeDate = $value;
+  }
+
+  public function getNeedBeforeDate(){
+    return $this->needBeforeDate;
+  }
+
+  public function setOrderSystem($value=NULL){
+    $this->orderSystem = $value;
+  }
+
+  public function getOrderSystem(){
+    return $this->orderSystem;
+  }
+
+  public function setUserId($value=NULL){
+    $this->userId = $value;
+  }
+
+  public function getUserId(){
+    return $this->userId;
+  }
+
+  public function setVerificationReferenceSource($value=NULL){
+    $this->verificationReferenceSource = $value;
+  }
+
+  public function getVerificationReferenceSource() {
+    return $this->verificationReferenceSource;
+  }
 
   public function setOutputType($value=NULL){
     $this->outputType = $value;
@@ -60,7 +124,8 @@ class bibdk_openorder extends TingClientRequest{
   protected function getRequest() {
     $this->setParameter('action', 'borrowerCheckRequest');
 
-    $params = array('action','pickUpAgencyId','serviceRequester','authentication','pid');
+    $params = array('action','pickUpAgencyId','serviceRequester','authentication','pid', 'needBeforeDate',
+              'orderSystem','userId','verificationReferenceSource','copy','exactEdition','userIdAuthenticated');
     foreach ($params as $parameter) {
       $getter = 'get' . ucfirst($parameter);
       if ($value = $this->$getter()) {
