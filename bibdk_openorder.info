@@ -3,4 +3,5 @@ description = handle request to openorder webservice.
 core = 7.x
 package = "Bibliotek.dk"
 files[] = bibdk_openorder.request.inc
+files[] = test/bibdk_openorder.test
 dependencies[] = ting_client
