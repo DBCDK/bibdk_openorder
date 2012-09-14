@@ -10,11 +10,12 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId,$pid){
   $pickupAgencyId = '715700';
   $pid = '870970-basis:28794932';
 
-  $params['pickupAgencyId'] = $pickupAgencyId;
+  $params['pickUpAgencyId'] = $pickupAgencyId;
   $params['pid'] = $pid;
-
+  
   $client = new ting_client_class();
   $response = $client->do_openorder($params);
+  return $response;
 }
 
 /**
@@ -27,7 +28,7 @@ function _bibdk_openorder_set_fixed_parameters(){
   $authentication['userIdAut'] = variable_get('bibdk_openorder_userIdAut');
   $params['authentication'] = $authentication;
 
-  $params['serviceRequester']=variable_get('bibdk_openorder_serviceRequester');
+  $params['serviceRequester'] = variable_get('bibdk_openorder_serviceRequester');
 
   return $params;
 }
