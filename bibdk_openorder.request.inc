@@ -15,6 +15,7 @@ class bibdk_openorder extends TingClientRequest{
   protected $copy;
   protected $exactEdition;
   protected $userIdAuthenticated;
+  protected $userIdType;
 
   public function setUserIdAuthenticated($value=NULL){
     $this->userIdAuthenticated = $value;
@@ -22,6 +23,14 @@ class bibdk_openorder extends TingClientRequest{
 
   public function getUserIdAuthenticated(){
     return $this->userIdAuthenticated;
+  }
+  
+  public function setUserIdType($userIdType) {
+    $this->userIdType = $userIdType;
+  }
+  
+  public function getUserIdType() {
+    return $this->userIdType;
   }
 
   public function setExactEdition($value=NULL){

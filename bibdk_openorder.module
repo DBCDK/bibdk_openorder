@@ -1,20 +1,6 @@
 <?php
 
-/*function bibdk_openorder_menu(){
-  $items['HEST'] = array(
-    'page callback'=>'bibdk_openorder_HEST',
-    'access callback'=>TRUE,
-  );
-  return $items;
-}
-
-function bibdk_openorder_HEST(){
-  $res =  bibdk_openorder_do_placeOrder('870970-basis:28794932','715700','1231231230');
-  var_dump($res);
-  }*/
-
-
-function bibdk_openorder_do_placeOrder($pid,$pickUpAgencyId,$userId,$needBeforeDate=NULL){
+function bibdk_openorder_do_placeOrder($pid, $pickUpAgencyId, $userId, $needBeforeDate = NULL){
   // test userId : 1231231230
   // test pickUpAgency : 710100
   $params = _bibdk_openorder_set_fixed_parameters();
@@ -22,9 +8,13 @@ function bibdk_openorder_do_placeOrder($pid,$pickUpAgencyId,$userId,$needBeforeD
   $params = array_merge($params,$additional);
 
   // for testing -- replace these three (and probably more) with values from args or session
-  $params['pid'] = '870970-basis:28794932';
-  $params['userId'] = '1231231230';
-  $params['pickUpAgencyId'] = '710100';
+  #$params['pid'] = '870970-basis:28794932';
+  #$params['userId'] = '1231231230';
+  #$params['pickUpAgencyId'] = '710100';
+  
+  $params['pid'] = $pid;
+  $params['userId'] = $userId;
+  $params['pickUpAgencyId'] = $pickUpAgencyId;
 
   $params['action'] = 'placeOrderRequest';
 
@@ -46,10 +36,9 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   // @TODO; get this value from openagency -- not yet implemented
   $params['userIdAuthenticated'] = 'TRUE';
   // @TODO; get this value from openagency -- not yet implemented
-  $params['userIdType'] = 'cpr';
+  $params['userIdType'] = BibdkReservationOrderObject::GetObject()->getFields()->getUserIdKey();
   // @TODO this value should probably be set in config -- ask somebody
-  $params['verificationReferenceSource'] = 'dbcdatawell';
-
+  $params['verificationReferenceSource'] = variable_get('bibdk_openorder_verification_reference_source', FALSE);
   return $params;
 }
 
@@ -142,5 +131,13 @@ function bibdk_openorder_form_ting_client_admin_webservices_settings_alter (&$fo
     '#description' => t('Servicerequester for openorder e.g. 190101'),
     '#required' => TRUE,
     '#default_value' => variable_get('bibdk_openorder_serviceRequester', FALSE),
+  );
+
+   $form['openorder']['bibdk_openorder_verification_reference_source'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Verification reference source'),
+    '#description' => t('Reference to a database, or a bibliographic information-system, where the item ordered has been verified e.g. dbcdatawell (test) or bibliotekdk'),
+    '#required' => TRUE,
+    '#default_value' => variable_get('bibdk_openorder_verification_reference_source', FALSE),
   );
 }
