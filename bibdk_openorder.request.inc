@@ -7,16 +7,101 @@ class bibdk_openorder extends TingClientRequest{
   protected $pid;
   protected $action;
   protected $outputType;
-  // extra attributes for placeOrderRequest
+  
+// extra attributes for placeOrderRequest
   protected $needBeforeDate;
   protected $orderSystem;
   protected $userId;
+  protected $userAddress;
+  protected $userName;
+  protected $userMail;
+  protected $userTelephone;
   protected $verificationReferenceSource;
   protected $copy;
   protected $exactEdition;
   protected $userIdAuthenticated;
   protected $userIdType;
 
+  public function setNeedBeforeDate($value=NULL){
+    $this->needBeforeDate = $value;
+  }
+
+  public function getNeedBeforeDate(){
+    return $this->needBeforeDate;
+  }
+  
+  public function setOrderSystem($value=NULL){
+    $this->orderSystem = $value;
+  }
+
+  public function getOrderSystem(){
+    return $this->orderSystem;
+  }
+  
+  public function setUserId($value=NULL){
+    $this->userId = $value;
+  }
+
+  public function getUserId(){
+    return $this->userId;
+  }
+  
+  public function setUserAddress($userAddress){
+    $this->userAddress = $userAddress; 
+  }
+  
+  public function getUserAddress(){
+    return $this->userAddress; 
+  }
+  
+  public function setUserName($userName){
+    $this->userName = $userName; 
+  }
+  
+  public function getUserName(){
+    return $this->userName;
+  }
+  
+  public function setUserMail($userMail){
+    $this->userMail = $userMail; 
+  }
+  
+  public function getUserMail(){
+    return $this->userMail;
+  }
+  
+  public function setUserTelephone($userTelephone){
+    $this->userTelephone = $userTelephone; 
+  }
+  
+  public function getUserTelephone(){
+    return $this->userTelephone;
+  }
+  
+  public function setVerificationReferenceSource($value=NULL){
+    $this->verificationReferenceSource = $value;
+  }
+
+  public function getVerificationReferenceSource() {
+    return $this->verificationReferenceSource;
+  }
+  
+  public function setCopy($value=NULL){
+    $this->copy = $value;
+  }
+
+  public function getCopy(){
+    return $this->copy;
+  }
+  
+  public function setExactEdition($value=NULL){
+    $this->exactEdition=$value;
+  }
+
+  public function getExactEdition(){
+    return $this->exactEdition;
+  }
+  
   public function setUserIdAuthenticated($value=NULL){
     $this->userIdAuthenticated = $value;
   }
@@ -33,54 +118,8 @@ class bibdk_openorder extends TingClientRequest{
     return $this->userIdType;
   }
 
-  public function setExactEdition($value=NULL){
-    $this->exactEdition=$value;
-  }
-
-  public function getExactEdition(){
-    return $this->exactEdition;
-  }
-
-  public function setCopy($value=NULL){
-    $this->copy = $value;
-  }
-
-  public function getCopy(){
-    return $this->copy;
-  }
-
-  public function setNeedBeforeDate($value=NULL){
-    $this->needBeforeDate = $value;
-  }
-
-  public function getNeedBeforeDate(){
-    return $this->needBeforeDate;
-  }
-
-  public function setOrderSystem($value=NULL){
-    $this->orderSystem = $value;
-  }
-
-  public function getOrderSystem(){
-    return $this->orderSystem;
-  }
-
-  public function setUserId($value=NULL){
-    $this->userId = $value;
-  }
-
-  public function getUserId(){
-    return $this->userId;
-  }
-
-  public function setVerificationReferenceSource($value=NULL){
-    $this->verificationReferenceSource = $value;
-  }
-
-  public function getVerificationReferenceSource() {
-    return $this->verificationReferenceSource;
-  }
-
+  
+  // setters/getters for checkOrderPolicyRequest
   public function setOutputType($value=NULL){
     $this->outputType = $value;
   }
@@ -134,7 +173,7 @@ class bibdk_openorder extends TingClientRequest{
     $this->setParameter('action', 'borrowerCheckRequest');
 
     $params = array('action','pickUpAgencyId','serviceRequester','authentication','pid', 'needBeforeDate',
-              'orderSystem','userId','verificationReferenceSource','copy','exactEdition','userIdAuthenticated');
+              'orderSystem','verificationReferenceSource','copy','exactEdition','userIdAuthenticated', 'userAddress', 'userId', 'userName', 'userMail', 'userTelephone');
     foreach ($params as $parameter) {
       $getter = 'get' . ucfirst($parameter);
       if ($value = $this->$getter()) {
