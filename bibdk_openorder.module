@@ -1,6 +1,6 @@
 <?php
 
-function bibdk_openorder_do_placeOrder($pid, $pickUpAgencyId, $userId, $needBeforeDate = NULL){
+function bibdk_openorder_do_placeOrder($pid, $pickUpAgencyId, $userId){
   // test userId : 1231231230
   // test pickUpAgency : 710100
   $params = _bibdk_openorder_set_fixed_parameters();
@@ -18,7 +18,6 @@ function bibdk_openorder_do_placeOrder($pid, $pickUpAgencyId, $userId, $needBefo
   $params['action'] = 'placeOrderRequest';
   
   $userData = BibdkReservationOrderObject::GetObject()->getUserOrderData();
-  #dpm($userData);
   
   foreach ($userData as $key => $value) {
     $params[$key] = $value; 
