@@ -86,6 +86,14 @@ function bibdk_openorder_ting_client_webservice () {
 }
 
 /**
+ * Implements hook_how_r_u();
+ * @return type
+ */
+function bibdk_openorder_how_r_u(){
+  return array('Open Order' => variable_get('bibdk_openorder_url'));
+}
+
+/**
  * Implements hook_form_FORM_ID_alter (ting_client_admin_webservices_settings)
  * add field to webservice client settings
  * @url to openorder
