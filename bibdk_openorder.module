@@ -11,16 +11,16 @@ function bibdk_openorder_do_placeOrder($pid, $pickUpAgencyId, $userId){
   #$params['pid'] = '870970-basis:28794932';
   #$params['userId'] = '1231231230';
   #$params['pickUpAgencyId'] = '710100';
-  
+
   $params['pid'] = $pid;
   $params['userId'] = $userId;
   $params['pickUpAgencyId'] = $pickUpAgencyId;
   $params['action'] = 'placeOrderRequest';
-  
+
   $userData = BibdkReservationOrderObject::GetObject()->getUserOrderData();
-  
+
   foreach ($userData as $key => $value) {
-    $params[$key] = $value; 
+    $params[$key] = $value;
   }
 
   $client = new ting_client_class();
@@ -57,7 +57,7 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId,$pid){
   // testing
   $params['pickUpAgencyId'] = $pickupAgencyId;
   $params['pid'] = $pid;
-  
+
   $client = new ting_client_class();
   $response = $client->do_openorder($params);
   return $response;
@@ -82,7 +82,11 @@ function _bibdk_openorder_set_fixed_parameters(){
  * Implements hook_ting_client_webservice (@see ting_client.module)
  **/
 function bibdk_openorder_ting_client_webservice () {
-  return array('openorder' => 'bibdk_openorder_url',);
+  $ret = array();
+  $ret['openorder']['class'] = ' bibdk_openorder';
+  $ret['openorder']['url'] = 'bibdk_openorder_url';
+  // return array('openorder' => 'bibdk_openorder_url',);
+  return $ret;
 }
 
 /**
