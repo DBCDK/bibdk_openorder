@@ -1,45 +1,29 @@
 <?php
 
-function bibdk_openorder_do_placeOrder($pid, $pickUpAgencyId, $userId){
-  // test userId : 1231231230
-  // test pickUpAgency : 710100
-  $params = _bibdk_openorder_set_fixed_parameters();
+function bibdk_openorder_do_placeOrder($params){
+    $params += _bibdk_openorder_set_fixed_parameters();
   $additional = _bibdk_openorder_set_fixed_placeorder_params();
-  $params = array_merge($params,$additional);
-
-  // for testing -- replace these three (and probably more) with values from args or session
-  #$params['pid'] = '870970-basis:28794932';
-  #$params['userId'] = '1231231230';
-  #$params['pickUpAgencyId'] = '710100';
-
-  $params['pid'] = $pid;
-  $params['userId'] = $userId;
-  $params['pickUpAgencyId'] = $pickUpAgencyId;
+  $params = array_merge($additional, $params);
   $params['action'] = 'placeOrderRequest';
-
-  $userData = BibdkReservationOrderObject::GetObject()->getUserOrderData();
-
-  foreach ($userData as $key => $value) {
-    $params[$key] = $value;
-  }
-
   $client = new ting_client_class();
   $response = $client->do_openorder($params);
 
   return $response;
+  
+
 }
 
 function _bibdk_openorder_set_fixed_placeorder_params() {
   // @TODO; is this value fixed?? or should we get it from somewhere else .. openagency maybe
-  $params['copy'] = 'FALSE';
+  $params['copy'] = 'false';
   // @TODO; is this value fixed?? or should we get it from somewhere else .. openagency maybe
-  $params['exactEdition'] = 'TRUE';
+  $params['exactEdition'] = 'true';
   // @TODO; get this value from userinput
-  $params['needBeforeDate'] = date('d-m-YTH:i:s', strtotime('now+3 months'));
+  //$params['needBeforeDate'] = date('d-m-YTH:i:s', strtotime('now+3 months'));
   // @TODO; this value is the same as service_requester --- is it always so ?? or should it be set in config ??
-  $params['orderSystem'] = 'bibliotek.dk';
+  $params['orderSystem'] = 'bibliotekdk';
   // @TODO; get this value from openagency -- not yet implemented
-  $params['userIdAuthenticated'] = 'TRUE';
+  $params['userIdAuthenticated'] = 'true';
   // @TODO; get this value from openagency -- not yet implemented
   $params['userIdType'] = BibdkReservationOrderObject::GetObject()->getFields()->getUserIdKey();
   // @TODO this value should probably be set in config -- ask somebody
