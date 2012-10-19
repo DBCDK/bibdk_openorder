@@ -1,0 +1,21 @@
+<?php
+class BibdkOpenOrderUnitTestCast extends DrupalUnitTestCase {
+
+  public static function getInfo() {
+    return array (
+      'name' => t('openorder unittest'),
+      'description' => t('Tests openorder webservice is alive'),
+      'group' => t('bibliotek.dk'),
+    );
+     }
+
+  public function setUp() {
+    parent::setUp();
+  }
+
+  public function testOpenOrderWebService() {
+    $curl = curl_init('http://guesstimate.dbc.dk/~fvs/OpenLibrary/OpenOrder/trunk/server.php/?HowRU');
+    $res = curl_exec($curl);
+    $this->assertEqual($res,'Gr8');
+  }
+}
