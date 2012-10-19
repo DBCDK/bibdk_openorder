@@ -1,6 +1,7 @@
 name = Bibliotek.dk openorder
 description = handle request to openorder webservice.
 core = 7.x
+version = 0.1
 package = "Bibliotek.dk"
 files[] = bibdk_openorder.request.inc
 files[] = test/bibdk_openorder.test
