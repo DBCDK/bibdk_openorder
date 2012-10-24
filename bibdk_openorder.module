@@ -33,6 +33,8 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
 
 /**
  * do a checkOrderPolicyRequest
+ * 
+ * return OrderPolicy
  **/
 function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId,$pid){
   $params = _bibdk_openorder_set_fixed_parameters();
@@ -44,7 +46,7 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId,$pid){
 
   $client = new ting_client_class();
   $response = $client->do_openorder($params);
-  return $response;
+  return new OrderPolicy($response);
 }
 
 /**
