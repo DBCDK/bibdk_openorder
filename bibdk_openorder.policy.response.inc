@@ -40,7 +40,7 @@ class OrderPolicy {
       $orderIsPossible = TRUE;
       break;
     case 'not_owned_ILL_loc':
-      $orderIsPossible = FALSE;
+      $orderIsPossible = TRUE;
       break;
     case 'owned_wrong_mediumType':
       $orderIsPossible = TRUE;
