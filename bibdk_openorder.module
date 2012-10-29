@@ -25,7 +25,7 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   // @TODO; get this value from openagency -- not yet implemented
   $params['userIdAuthenticated'] = 'true';
   // @TODO; get this value from openagency -- not yet implemented
-  $params['userIdType'] = BibdkReservationOrderObject::GetObject()->getFields()->getUserIdKey();
+  //$params['userIdType'] = 'optional'; //BibdkReservationOrderObject::GetObject()->getFields()->getUserIdKey();
   // @TODO this value should probably be set in config -- ask somebody
   $params['verificationReferenceSource'] = variable_get('bibdk_openorder_verification_reference_source', FALSE);
   return $params;

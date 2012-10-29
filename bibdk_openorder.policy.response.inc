@@ -16,7 +16,8 @@ class OrderPolicy {
   }
 
   public function getOrderPossible() {
-    return isset($this->response->checkOrderPolicyResponse->orderPossible) ?  $this->response->checkOrderPolicyResponse->orderPossible->{'$'} : NULL;
+    $bool =  isset($this->response->checkOrderPolicyResponse->orderPossible) ? $this->response->checkOrderPolicyResponse->orderPossible->{'$'} : FALSE;
+    return ($bool === 'TRUE');
   }
 
   public function getOrderPossibleReason() {
@@ -27,48 +28,42 @@ class OrderPolicy {
     return $this->orderCondition;
     return isset($this->response->checkOrderPolicyResponse->orderCondition) ?  $this->response->checkOrderPolicyResponse->orderCondition->{'$'} : NULL;
   }
+  
+  public function getOrderConditionForLanguage() {
+    return $this->orderCondition;
+    return isset($this->response->checkOrderPolicyResponse->orderCondition) ?  $this->response->checkOrderPolicyResponse->orderCondition->{'$'} : NULL;
+  }
+  
   //$res->checkOrderPolicyResponse->checkOrderPolicyError
   public function getCheckOrderPolicyError() {
     return isset($this->response->checkOrderPolicyError) ?  $this->response->checkOrderPolicyError{'$'} : NULL;
   }
   
-  //TODO: Implement orderIsPossible
-  public function orderIsPossible(){
-    $reason = $this->getOrderPossibleReason();
-    switch ($reason) {
-    case 'owned_accepted':
-      $orderIsPossible = TRUE;
-      break;
-    case 'not_owned_ILL_loc':
-      $orderIsPossible = TRUE;
-      break;
-    case 'owned_wrong_mediumType':
-      $orderIsPossible = TRUE;
-      break;
-    case 'not_owned_wrong_ILL_mediumType':
-      $orderIsPossible = TRUE;
-      break;
-    case 'not_owned_no_ILL_loc':
-      $orderIsPossible = TRUE;
-      break;
-    case 'owned_own_catalogue':
-      $orderIsPossible = TRUE;
-      break;
-    case 'No holdings':
-      $orderIsPossible = TRUE;
-      break;
-    default :
-      $orderIsPossible = FALSE;
-    }
-  return $orderIsPossible;
-}
-
-//TODO: Implement getMessages
-public function getMessages(){
-  return array('test' => 'This is a message');
-}
-  
-  private function getOrderReasonText(){
+  public function getMessages(){
+    $messages = array();
+    if ($this->getLookUpUrl()){
+      $messages['lookUpUrl'] = array(
+        '#theme' => 'link',
+        '#text' => $this->getLookUpUrl(),
+        '#path' => $this->getLookUpUrl(),        
+        '#options' => array(
+           'attributes' => array(),
+        ),
+      );
+      }
+    if ($this->getAgencyCatalogueUrl()){
+      $messages['lookUpUrl'] = array(
+        '#theme' => 'link',
+        '#text' => $this->getAgencyCatalogueUrl(),
+        '#path' => $this->getAgencyCatalogueUrl(),
+        '#options' => array(
+          'attributes' => array(),
+        ),
+      );
+      }
+      return $messages;
+  }
+  /*private function getOrderReasonText(){
     $reason = $this->getOrderPossibleReason();
     $reason_place_holder = NULL;
     switch ($reason) {
@@ -89,6 +84,6 @@ public function getMessages(){
   }
   return $reason_place_holder;
     
-  }
+  }*/
   
 }
