@@ -1,7 +1,7 @@
 <?php
 
-function bibdk_openorder_do_placeOrder($params){
-    $params += _bibdk_openorder_set_fixed_parameters();
+function bibdk_openorder_do_placeOrder($params) {
+  $params += _bibdk_openorder_set_fixed_parameters();
   $additional = _bibdk_openorder_set_fixed_placeorder_params();
   $params = array_merge($additional, $params);
   $params['action'] = 'placeOrderRequest';
@@ -9,8 +9,6 @@ function bibdk_openorder_do_placeOrder($params){
   $response = $client->do_openorder($params);
 
   return $response;
-  
-
 }
 
 function _bibdk_openorder_set_fixed_placeorder_params() {
@@ -35,8 +33,8 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
  * do a checkOrderPolicyRequest
  * 
  * return OrderPolicy
- **/
-function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId,$pid){
+ * */
+function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId, $pid) {
   $params = _bibdk_openorder_set_fixed_parameters();
   $params['action'] = 'checkOrderPolicyRequest';
 
@@ -51,8 +49,8 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId,$pid){
 
 /**
  * parameters common for all request
- **/
-function _bibdk_openorder_set_fixed_parameters(){
+ * */
+function _bibdk_openorder_set_fixed_parameters() {
   $authentication = array();
   $authentication['groupIdAut'] = variable_get('bibdk_openorder_groupIdAut');
   $authentication['passwordAut'] = variable_get('bibdk_openorder_passwordAut');
@@ -66,8 +64,8 @@ function _bibdk_openorder_set_fixed_parameters(){
 
 /**
  * Implements hook_ting_client_webservice (@see ting_client.module)
- **/
-function bibdk_openorder_ting_client_webservice () {
+ * */
+function bibdk_openorder_ting_client_webservice() {
   $ret = array();
   $ret['openorder']['class'] = ' bibdk_openorder';
   $ret['openorder']['url'] = 'bibdk_openorder_url';
@@ -79,7 +77,7 @@ function bibdk_openorder_ting_client_webservice () {
  * Implements hook_how_r_u();
  * @return type
  */
-function bibdk_openorder_how_r_u(){
+function bibdk_openorder_how_r_u() {
   return array('Open Order' => variable_get('bibdk_openorder_url'));
 }
 
@@ -87,13 +85,13 @@ function bibdk_openorder_how_r_u(){
  * Implements hook_form_FORM_ID_alter (ting_client_admin_webservices_settings)
  * add field to webservice client settings
  * @url to openorder
-  **/
-function bibdk_openorder_form_ting_client_admin_webservices_settings_alter (&$form,&$form_state) {
+ * */
+function bibdk_openorder_form_ting_client_admin_webservices_settings_alter(&$form, &$form_state) {
   $form['openorder'] = array(
     '#type' => 'fieldset',
     '#title' => t('Openorder settings'),
     '#description' => t('Setting for openorder webservice'),
-    '#weight'=>-2,
+    '#weight' => -2,
   );
 
   $form['openorder']['bibdk_openorder_url'] = array(
@@ -128,7 +126,7 @@ function bibdk_openorder_form_ting_client_admin_webservices_settings_alter (&$fo
     '#default_value' => variable_get('bibdk_openorder_userIdAut', FALSE),
   );
 
-   $form['openorder']['bibdk_openorder_serviceRequester'] = array(
+  $form['openorder']['bibdk_openorder_serviceRequester'] = array(
     '#type' => 'textfield',
     '#title' => t('Servicerequester'),
     '#description' => t('Servicerequester for openorder e.g. 190101'),
@@ -136,7 +134,7 @@ function bibdk_openorder_form_ting_client_admin_webservices_settings_alter (&$fo
     '#default_value' => variable_get('bibdk_openorder_serviceRequester', FALSE),
   );
 
-   $form['openorder']['bibdk_openorder_verification_reference_source'] = array(
+  $form['openorder']['bibdk_openorder_verification_reference_source'] = array(
     '#type' => 'textfield',
     '#title' => t('Verification reference source'),
     '#description' => t('Reference to a database, or a bibliographic information-system, where the item ordered has been verified e.g. dbcdatawell (test) or bibliotekdk'),
