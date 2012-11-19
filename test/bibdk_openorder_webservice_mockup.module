@@ -7,41 +7,18 @@
 function bibdk_openorder_webservice_mockup_menu() {
   $items['bibdk_openorder_webservice'] = array(
     'page callback' => 'bibdk_openorder_webservice_mockup_request',
-    'access callback' => 'bibdk_openorder_webservice_mockup_access',
+    'access callback' => TRUE,
   );
-  $items['bibdk_openorder_mockup'] = array(
-    'page callback' => 'bibdk_openorder_webservice_mockup_request',
-    'access callback' => 'bibdk_openorder_webservice_mockup_access',
+  $items['bibdk_openorder_webservice/test'] = array(
+    'page callback' => 'bibdk_openorder_webservice_mockup_test',
+    'access callback' => TRUE,
   );
 
   return $items;
 }
 
-function bibdk_openorder_webservice_mockup_form($form,$form_state){
-  $form['checkOrderPolicy'] = array(
-    '#type' => 'fieldset',
-    '#title' => 'Check order policy request',
-    '#description' => 'Default values is a good request, to test a bad request; make some changes',
-  );
-   $form['checkOrderPolicy']  = array(
-    '#method'=>'post',
-    'submit'=>array(
-      '#type'=>'submit',
-      '#value'=>'test me',
-    ),
-    'pickupAgencyId'=>array(
-      '#title' => 'pickupAgencyId',
-      '#type'=>'textfield',
-      '#default_value' => '715700',
-    ),
-    'pid' => array(
-      '#title' => 'pid',
-      '#type' => 'textfield',
-      '#default_value' => '870970-basis:28794932',
-    ),
-  );
-
-  return $form;
+function bibdk_openorder_webservice_mockup_test() {
+  return '<form name="test" action="bibdk_openorder_webservice" method="POST" target="_blank"><textarea name="xml"></textarea><input type="submit" name="sub" value="submit"/></form>';
 }
 
 /**
@@ -49,21 +26,58 @@ function bibdk_openorder_webservice_mockup_form($form,$form_state){
  * @return String json
  */
 function bibdk_openorder_webservice_mockup_request() {
-  $path = drupal_get_path('module', 'bibdk_openorder_webservice_mockup');
-  //$data = file_get_contents('php://input');
-  $data = $_POST;
-
-  if( $data ) {
-    // @TODO; do something here
-    echo 'TESTHEST';
-    print_r($data);
+  if (isset($_POST['xml'])) {
+    $data = rawurldecode($_POST['xml']);
   }
   else {
-    echo 'welcome to bibdk_openorder_webservice mockup</br>';
-    echo drupal_render(drupal_get_form('bibdk_openorder_webservice_mockup_form'));
+    $data = file_get_contents('php://input');
+  }
+  
+  //kpr($data);
+  $body = bibdk_openorder_webservice_mockup_parse_xml($data);
+  
+  try {
+    $request = $body->children();
+    switch ($request->getName()) {
+      case 'checkOrderPolicyRequest' :
+        return bibdk_openorder_webservice_checkOrderPolicyRequest($request->checkOrderPolicyRequest);
+        break;
+      case 'placeOrderRequest' :
+        return bibdk_openorder_webservice_placeOrderRequest($request->placeOrderRequest);
+        break;
+      default:
+        return SOAP_FAULT;
+    }
+  } catch (Exception $e) {
+    return SOAP_FAULT;
   }
 }
 
+function bibdk_openorder_webservice_placeOrderRequest($request){
+  $path = drupal_get_path('module', 'bibdk_openorder_webservice_mockup');
+  drupal_add_http_header('Content-Type', 'application/json');
+  $resp = file_get_contents($path . '/placeOrder.json');
+  print $resp;
+  
+}
+
+
+function bibdk_openorder_webservice_checkOrderPolicyRequest($request){
+  $path = drupal_get_path('module', 'bibdk_openorder_webservice_mockup');
+  
+  $query = $request->pickUpAgencyId;
+  
+  if ($query == 'DK-746112'){
+      drupal_add_http_header('Content-Type', 'application/json');
+      $resp = file_get_contents($path . '/policy-lookupurl.json');
+  }else {
+      // No results
+     drupal_add_http_header('Content-Type', 'application/json');
+    $resp = file_get_contents($path . '/policy-ok.json');
+  }
+
+  print $resp;
+}
 
 /**
  * Parsing the request into a xml object
@@ -71,12 +85,10 @@ function bibdk_openorder_webservice_mockup_request() {
  * @return \SimpleXMLElement
  */
 function bibdk_openorder_webservice_mockup_parse_xml($soap){
-  $pattern = "/:?SOAP-ENV:?/";
-  $replace = '';
-  $xml = preg_replace($pattern, $replace, $soap);
-
-  $envelope = new SimpleXMLElement($xml);
-  return $envelope;
+  $envelope = new SimpleXMLElement($soap);
+  $envelope->registerXPathNamespace("s", 'http://schemas.xmlsoap.org/soap/envelope/');
+  $envelope->registerXPathNamespace("ns", 'http://oss.dbc.dk/ns/openorder');
+  return current($envelope->xpath('/s:Envelope/s:Body'));
 }
 
 function bibdk_openorder_webservice_mockup_access() {
