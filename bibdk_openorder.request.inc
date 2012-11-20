@@ -484,7 +484,8 @@ class bibdk_openorder extends TingClientRequest {
 
   protected function getRequest() {
     if(function_exists('ting_client_validate_xsd'))
-      $params = ting_client_validate_xsd("http://guesstimate.dbc.dk/~fvs/OpenLibrary/OpenOrder/trunk/openorder.xsd", $this->getAction());
+      // NOTICE http://dutton1.dbc.dk/openorder.addi.dk/2.1.next/openorder.xsd
+      $params = ting_client_validate_xsd("openorder.xsd", $this->getAction());
     else
       new Exception("Validation is needed for bibdk_openorder");
     foreach ($params as $parameter) {
