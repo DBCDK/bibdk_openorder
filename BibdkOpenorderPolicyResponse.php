@@ -2,14 +2,14 @@
 
 class BibdkOpenorderPolicyResponse {
 
-  public $agencyCatalogueUrl;
-  public $lookUpUrls;
-  public $orderPossible;
-  public $orderPossibleReason;
-  public $orderCondition;
-  public $response;
-  public $checkOrderPolicyError;
-  public $agencyId;
+  private $agencyCatalogueUrl;
+  private $lookUpUrls;
+  private $orderPossible;
+  private $orderPossibleReason;
+  private $orderCondition;
+  private $response;
+  private $checkOrderPolicyError;
+  private $agencyId;
 
   public function getAgencyCatalogueUrl() {
     return isset($this->response->checkOrderPolicyResponse->agencyCatalogueUrl) ? $this->response->checkOrderPolicyResponse->agencyCatalogueUrl->{'$'} : NULL;
@@ -58,35 +58,6 @@ class BibdkOpenorderPolicyResponse {
 
   public function setAgencyId($agencyId) {
     $this->agencyId = $agencyId;
-  }
-
-  public function getUrls() {
-    $urls = array();
-    //TODO (mmj) theoretically several urls can be available but currently only one is delivered - should possibly be moved elsewhere
-    if ($this->getLookUpUrl()) {
-      $url = drupal_parse_url('reservations/catalogue_url/0');
-      $urls['lookUpUrl'] = array(
-        '#theme' => 'link',
-        '#text' => t('link_to_local_library_lookup_url', array(), array('context' => 'bibdk_reservation')),
-        '#path' => $url['path'],
-        '#options' => array(
-          'attributes' => array(),
-          'html' => FALSE,
-        ),
-      );
-    }
-    if ($this->getAgencyCatalogueUrl()) {
-      $urls['lookUpUrl'] = array(
-        '#theme' => 'link',
-        '#text' => t('link_to_local_library_catalogue_url', array(), array('context' => 'bibdk_reservation')),
-        '#path' => $this->getAgencyCatalogueUrl(),
-        '#options' => array(
-          'attributes' => array(),
-          'html' => FALSE,
-        ),
-      );
-    }
-    return $urls;
   }
 
   /**
@@ -139,5 +110,41 @@ class BibdkOpenorderPolicyResponse {
       }
     }
     return $ret;
+  }
+
+  /* \brief parse searchCode,display elements
+   * @param array of stdObjects
+   * return array of form []['display','searchCode']
+   */
+  private static function _parseSearchCode($stdObjects) {
+    if (!is_array($stdObjects)) {
+      $stdObjects = array($stdObjects);
+    }
+
+    foreach ($stdObjects as $object) {
+      $subject['searchCode'] = self::_getSearchCodeElement($object->searchCode);
+      $subject['display'] = isset($object->display) ? $object->display->{'$'} : NULL;
+      $ret[] = $subject;
+    }
+
+    return $ret;
+  }
+
+  private static function _getSearchCodeElement($stdObject) {
+    $value = (isset($stdObject->{'$'})) ? $stdObject->{'$'} : NULL;
+
+    if (isset($stdObject->{'@phrase'})) {
+      $term = $stdObject->{'@phrase'}->{'$'};
+    }
+    elseif (isset($stdObject->{'@word'})) {
+      $term = $stdObject->{'@word'}->{'$'};
+    }
+
+    if (isset($value) && isset($term)) {
+      return $term . "=" . $value;
+    }
+    else {
+      return;
+    }
   }
 }

@@ -1,21 +1,47 @@
 <?php
-class BibdkOpenOrderUnitTestCast extends DrupalUnitTestCase {
+
+class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
+
+  private  $orderPolicy;
 
   public static function getInfo() {
-    return array (
-      'name' => t('openorder unittest'),
-      'description' => t('Tests openorder webservice is alive'),
-      'group' => t('bibliotek.dk'),
+    return array(
+      'name' => t('OrderPolicy - LookUpUrl availability'),
+      'description' => t('Tests that the BibdkOpenorderPolicyResponse class is functional and correctly returns a lookUpUrl'),
+      'group' => t('Bibdk OpenOrder'),
     );
-     }
-
-  public function setUp() {
-    parent::setUp();
   }
 
-  public function testOpenOrderWebService() {
-    $curl = curl_init('http://guesstimate.dbc.dk/~fvs/OpenLibrary/OpenOrder/trunk/server.php/?HowRU');
-    $res = curl_exec($curl);
-    $this->assertEqual($res,'Gr8');
+  public function setUp() {
+    $this->_createPolicyObject();
+    parent::setUp('bibdk_openorder');
+  }
+
+  public function testAgencyId(){
+    $agencyId = BibdkOpenorderPolicyResponse::GetObject()->getAgencyId();
+    $this->assertEqual('DK-765700', $agencyId, 'AgencyID correctly set and read');
+  }
+
+  public function testOrderPolicy(){
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertFalse($policy, 'Order is not possible');
+  }
+
+  public function testOrderPossibleReason() {
+    $reason = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossibleReason();
+    $this->assertEqual($reason, 'owned_own_catalogue', 'Reason correctly set: owned_own_catalogue');
+  }
+
+  public function testUrlAvailablity(){
+    $url = BibdkOpenorderPolicyResponse::GetObject()->getLookUpUrl();
+    $this->assertNotNull($url, 'URL is available: ' . $url);
+  }
+
+  private function _createPolicyObject() {
+    $file = file_get_contents(drupal_get_path('module', 'bibdk_openorder') . '/test/bibdk_orderpolicy_test_source.json');
+    $response = json_decode($file);
+    $this->orderPolicy = BibdkOpenorderPolicyResponse::SetObject();
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[0]);
+    BibdkOpenorderPolicyResponse::GetObject()->setAgencyId($response[1]->pickUpAgencyId);
   }
 }
