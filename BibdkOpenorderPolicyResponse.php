@@ -45,7 +45,7 @@ class BibdkOpenorderPolicyResponse {
   }
 
   public function getCheckOrderPolicyError() {
-    return isset($this->response->checkOrderPolicyError) ? $this->response->checkOrderPolicyError{'$'} : NULL;
+    return isset($this->response->checkOrderPolicyResponse->checkOrderPolicyError) ? $this->response->checkOrderPolicyResponse->checkOrderPolicyError->{'$'} : NULL;
   }
 
   public function setResponse($response) {
