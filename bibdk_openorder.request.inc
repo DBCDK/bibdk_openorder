@@ -362,6 +362,14 @@ class bibdk_openorder extends TingClientRequest {
     return $this->userId;
   }
 
+  public function setCustomId($value = NULL) {
+    $this->customId = $value;
+  }
+
+  public function getCustomId() {
+    return $this->customId;
+  }
+
   public function setUserAddress($userAddress) {
     $this->userAddress = $userAddress;
   }
@@ -497,7 +505,7 @@ class bibdk_openorder extends TingClientRequest {
       }
     }
     $this->setParameters($new_params);
-    
+
     return $this;
   }
 
