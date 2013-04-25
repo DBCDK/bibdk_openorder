@@ -29,6 +29,17 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   return $params;
 }
 
+function bibdk_openorder_do_checkArticleDeliveryRequest($pid) {
+  $params = _bibdk_openorder_set_fixed_parameters();
+  $params['action'] = 'checkArticleDeliveryRequest';
+  $params['pid'] = $pid;
+  $params['outputType'] = 'xml';
+  $client = new ting_client_class();
+  $response = $client->do_openorder($params);
+
+  return $response;
+}
+
 /**
  * do a checkOrderPolicyRequest
  *
