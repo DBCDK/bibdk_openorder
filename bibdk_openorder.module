@@ -6,7 +6,7 @@ function bibdk_openorder_do_placeOrder($params) {
   $params = array_merge($additional, $params);
   $params['action'] = 'placeOrderRequest';
   $client = new ting_client_class();
-  $response = $client->do_openorder($params);
+  $response = $client->do_request('openorder', $params);
 
   return $response;
 }
@@ -29,6 +29,17 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   return $params;
 }
 
+function bibdk_openorder_do_checkArticleDeliveryRequest($pid) {
+  $params = _bibdk_openorder_set_fixed_parameters();
+  $params['action'] = 'checkArticleDeliveryRequest';
+  $params['pid'] = $pid;
+  $params['outputType'] = 'xml';
+  $client = new ting_client_class();
+  $response = $client->do_request('openorder', $params);
+
+  return $response;
+}
+
 /**
  * do a checkOrderPolicyRequest
  *
@@ -43,7 +54,7 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId, $pid) {
   $params['pid'] = $pid;
 
   $client = new ting_client_class();
-  $response = $client->do_openorder($params);
+  $response = $client->do_request('openorder', $params);
   $orderpolicy = BibdkOpenorderPolicyResponse::SetObject();
   BibdkOpenorderPolicyResponse::GetObject()->setResponse($response);
   BibdkOpenorderPolicyResponse::GetObject()->setAgencyId($pickupAgencyId);
