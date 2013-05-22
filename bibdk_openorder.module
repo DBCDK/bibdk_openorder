@@ -1,4 +1,4 @@
-<?php
+<?php   
 
 function bibdk_openorder_do_placeOrder($params) {
   $params += _bibdk_openorder_set_fixed_parameters();
@@ -85,6 +85,7 @@ function bibdk_openorder_ting_client_webservice() {
   $ret = array();
   $ret['openorder']['class'] = 'bibdk_openorder';
   $ret['openorder']['url'] = 'bibdk_openorder_url';
+  $ret['openorder']['xsdNamespace'] = array(0=>'http://oss.dbc.dk/ns/openorder');
   // return array('openorder' => 'bibdk_openorder_url',);
   return $ret;
 }
