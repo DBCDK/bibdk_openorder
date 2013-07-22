@@ -1,7 +1,7 @@
-name = Bibliotek.dk openorder
+name = Bibliotek.dk - Openorder
 description = handle request to openorder webservice.
 core = 7.x
-version = 7.x-0.5
+version = 7.x-0.7
 package = Bibliotek.dk
 files[] = bibdk_openorder.request.inc
 files[] = BibdkOpenorderPolicyResponse.php

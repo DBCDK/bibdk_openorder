@@ -6,7 +6,7 @@ function bibdk_openorder_do_placeOrder($params) {
   $params = array_merge($additional, $params);
   $params['action'] = 'placeOrderRequest';
   $client = new ting_client_class();
-  $response = $client->do_openorder($params);
+  $response = $client->do_request('openorder', $params);
 
   return $response;
 }
@@ -54,7 +54,7 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId, $pid) {
   $params['pid'] = $pid;
 
   $client = new ting_client_class();
-  $response = $client->do_openorder($params);
+  $response = $client->do_request('openorder', $params);
   $orderpolicy = BibdkOpenorderPolicyResponse::SetObject();
   BibdkOpenorderPolicyResponse::GetObject()->setResponse($response);
   BibdkOpenorderPolicyResponse::GetObject()->setAgencyId($pickupAgencyId);
@@ -83,8 +83,9 @@ function _bibdk_openorder_set_fixed_parameters() {
  * */
 function bibdk_openorder_ting_client_webservice() {
   $ret = array();
-  $ret['openorder']['class'] = ' bibdk_openorder';
+  $ret['openorder']['class'] = 'bibdk_openorder';
   $ret['openorder']['url'] = 'bibdk_openorder_url';
+  $ret['openorder']['xsdNamespace'] = array(0 => 'http://oss.dbc.dk/ns/openorder');
   // return array('openorder' => 'bibdk_openorder_url',);
   return $ret;
 }
@@ -115,7 +116,7 @@ function bibdk_openorder_form_ting_client_admin_webservices_settings_alter(&$for
   $form['openorder']['bibdk_openorder_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Openorder URL'),
-    '#description' => t('URL to openorder e.g. http://dutton1.dbc.dk/openorder.addi.dk/2.1.next/'),
+    '#description' => t('URL to openorder e.g. http://openorder.addi.dk/2.2/'),
     '#required' => TRUE,
     '#default_value' => variable_get('bibdk_openorder_url', FALSE),
   );
