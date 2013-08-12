@@ -57,6 +57,15 @@ class bibdk_openorder extends TingClientRequest {
   protected $verificationReferenceSource;
   protected $volume;
   protected $callback;
+  protected $agencyId;
+
+  public function getAgencyId() {
+    return $this->agencyId;
+  }
+
+  public function setAgencyId($agencyId) {
+    $this->agencyId = $agencyId;
+  }
 
   public function getCallback() {
     return $this->callback;
