@@ -8,7 +8,7 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
     return array(
       'name' => t('OrderPolicy - LookUpUrl availability'),
       'description' => t('Tests that the BibdkOpenorderPolicyResponse class is functional and correctly returns a lookUpUrl'),
-      'group' => t('Bibdk OpenOrder'),
+      'group' => t('Bibliotek.dk - OpenOrder'),
     );
   }
 
@@ -44,4 +44,44 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
     BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[0]);
     BibdkOpenorderPolicyResponse::GetObject()->setAgencyId($response[1]->pickUpAgencyId);
   }
+}
+
+
+class BibdkOpenOrderWebTestCase extends DrupalWebTestCase {
+
+  public static function getInfo(){
+    return array(
+      'name' => t('OpenOrder webservice'),
+      'description' => t('Test webservice methods'),
+      'group' => t('Bibliotek.dk - OpenOrder'),
+    );
+
+  }
+
+  public function setUp() {
+    parent::setUp(array('bibdk_openorder', 'bibdk_openorder_webservice_mockup', 'devel'));
+
+
+  }
+
+  public function testIncrementRedirectStatTrue(){
+    global $base_url;
+    variable_set('bibdk_openorder_url', $base_url . '/bibdk_openorder_webservice/');
+
+    // The Stats have been updated
+    $result = bibdk_openorder_do_incrementRedirectStat('1111');
+    $this->assertTrue($result);
+
+    // The stats have not been updated
+    $result = bibdk_openorder_do_incrementRedirectStat(NULL);
+    $this->assertFalse($result);
+
+    // log have been added to watchdog
+    $query = db_select('watchdog', 'w')->fields('w', array('message'))->orderBy('wid', 'desc')->range(0,1);
+    $result = $query->execute();
+    $record = $result->fetchAssoc();
+    $this->assertEqual($record['message'], 'Could not register incrementRedirectStat for agency : @agencyID');
+
+  }
+
 }
