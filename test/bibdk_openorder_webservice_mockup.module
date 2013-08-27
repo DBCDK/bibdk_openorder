@@ -32,10 +32,10 @@ function bibdk_openorder_webservice_mockup_request() {
   else {
     $data = file_get_contents('php://input');
   }
-  
+
   //kpr($data);
   $body = bibdk_openorder_webservice_mockup_parse_xml($data);
-  
+
   try {
     $request = $body->children();
     switch ($request->getName()) {
@@ -45,6 +45,10 @@ function bibdk_openorder_webservice_mockup_request() {
       case 'placeOrderRequest' :
         return bibdk_openorder_webservice_placeOrderRequest($request->placeOrderRequest);
         break;
+      case 'incrementRedirectStatRequest' :
+        return bibdk_openorder_webservice_incrementRedirectStatRequest($request->incrementRedirectStatRequest);
+        break;
+
       default:
         return SOAP_FAULT;
     }
@@ -58,15 +62,25 @@ function bibdk_openorder_webservice_placeOrderRequest($request){
   drupal_add_http_header('Content-Type', 'application/json');
   $resp = file_get_contents($path . '/placeOrder.json');
   print $resp;
-  
+
+}
+
+function bibdk_openorder_webservice_incrementRedirectStatRequest($request){
+  if(empty($request->agencyId))
+    die();
+  $path = drupal_get_path('module', 'bibdk_openorder_webservice_mockup');
+  drupal_add_http_header('Content-Type', 'application/json');
+  $resp = file_get_contents($path . '/incrementRedirectStat.json');
+  print $resp;
+
 }
 
 
 function bibdk_openorder_webservice_checkOrderPolicyRequest($request){
   $path = drupal_get_path('module', 'bibdk_openorder_webservice_mockup');
-  
+
   $query = $request->pickUpAgencyId;
-  
+
   if ($query == 'DK-746112'){
       drupal_add_http_header('Content-Type', 'application/json');
       $resp = file_get_contents($path . '/policy-lookupurl.json');
