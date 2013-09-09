@@ -38,6 +38,7 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
   }
 
   private function _createPolicyObject() {
+    module_load_include('php', 'bibdk_openorder', 'BibdkOpenorderPolicyResponse');
     $file = file_get_contents(drupal_get_path('module', 'bibdk_openorder') . '/test/bibdk_orderpolicy_test_source.json');
     $response = json_decode($file);
     $this->orderPolicy = BibdkOpenorderPolicyResponse::SetObject();
