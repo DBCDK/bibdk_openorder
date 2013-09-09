@@ -66,11 +66,12 @@ function bibdk_openorder_webservice_placeOrderRequest($request){
 }
 
 function bibdk_openorder_webservice_incrementRedirectStatRequest($request){
-  if(empty($request->agencyId))
-    die();
   $path = drupal_get_path('module', 'bibdk_openorder_webservice_mockup');
   drupal_add_http_header('Content-Type', 'application/json');
-  $resp = file_get_contents($path . '/incrementRedirectStat.json');
+  if(empty($request->agencyId))
+    $resp = file_get_contents($path . '/incrementRedirectStatFail.json');
+  else
+    $resp = file_get_contents($path . '/incrementRedirectStat.json');
   print $resp;
 
 }
