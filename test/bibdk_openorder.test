@@ -63,6 +63,7 @@ class BibdkOpenOrderWebTestCase extends DrupalWebTestCase {
     module_enable(array('bibdk_openorder_webservice_mockup'));
     menu_rebuild();
     parent::setUp(array('bibdk_openorder', 'bibdk_openorder_webservice_mockup'));
+    variable_set('bibdk_openorder_url', $this->getAbsoluteUrl('bibdk_openorder_webservice'));
   }
 
   public function tearDown(){
@@ -73,8 +74,7 @@ class BibdkOpenOrderWebTestCase extends DrupalWebTestCase {
 
   public function testIncrementRedirectStatTrue(){
     module_load_include('module', 'bibdk_openorder', 'bibdk_openorder');
-    global $base_url;
-    variable_set('bibdk_openorder_url', $base_url . '/bibdk_openorder_webservice/');
+
 
     // The Stats have been updated
     $result = bibdk_openorder_do_incrementRedirectStat('1111');
