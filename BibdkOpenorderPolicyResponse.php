@@ -36,12 +36,23 @@ class BibdkOpenorderPolicyResponse {
     return isset($this->response->checkOrderPolicyResponse->orderPossibleReason) ? $this->response->checkOrderPolicyResponse->orderPossibleReason->{'$'} : NULL;
   }
 
-  public function getOrderCondition() {
-    return $this->orderCondition;
-  }
-
-  public function getOrderConditionForLanguage() {
-    return $this->orderCondition;
+  public function getOrderCondition($lang = 'dan') {
+    $lang = $this->drupalLangToServiceLang($lang);
+    $order_conditions = isset($this->response->checkOrderPolicyResponse->orderCondition) ? $this->response->checkOrderPolicyResponse->orderCondition : NULL;
+    if ( is_array($order_conditions) ) {
+      foreach ($order_conditions as $order_condition)
+        if ($order_condition->{'@language'}->{'$'} == $lang) {
+          $ret = $order_condition->{'$'};
+        }
+      if ( empty($ret) ) {
+        // given lanuguage was not found..simply return first in array
+        $ret = $order_condition->{'$'};
+      }
+      return $ret;
+    }
+    else {
+      return ( $order_conditions ) ? $order_conditions->{'$'} : NULL;
+    }
   }
 
   public function getCheckOrderPolicyError() {
@@ -147,4 +158,17 @@ class BibdkOpenorderPolicyResponse {
       return;
     }
   }
+
+  private function drupalLangToServiceLang($lang) {
+    // drupal en & en-gb = openformat eng
+    if ($lang == 'en' || $lang == 'en-gb') {
+      $lang = 'eng';
+    }
+    //drupal da = openformat dan
+    if ($lang == 'da') {
+      $lang = 'dan';
+    }
+    return $lang;
+  }
+
 }
