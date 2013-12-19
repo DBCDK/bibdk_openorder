@@ -40,16 +40,32 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
   public function testOrderPolicyOk(){
     $file = file_get_contents(drupal_get_path('module', 'bibdk_openorder') . '/test/bibdk_orderpolicy_test_bool.json');
     $response = json_decode($file);
+
     BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[0]);
     $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
     $this->assertTrue($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[1]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertTrue($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[2]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertTrue($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[3]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertFalse($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[4]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertFalse($policy, 'Order is possible');
   }
 
   private function _createPolicyObject() {
     module_load_include('php', 'bibdk_openorder', 'BibdkOpenorderPolicyResponse');
     $file = file_get_contents(drupal_get_path('module', 'bibdk_openorder') . '/test/bibdk_orderpolicy_test_source.json');
     $response = json_decode($file);
-    
     $this->orderPolicy = BibdkOpenorderPolicyResponse::SetObject();
     BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[0]);
     BibdkOpenorderPolicyResponse::GetObject()->setAgencyId($response[1]->pickUpAgencyId);

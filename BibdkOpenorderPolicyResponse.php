@@ -29,7 +29,7 @@ class BibdkOpenorderPolicyResponse {
 
   public function getOrderPossible() {
     $bool = isset($this->response->checkOrderPolicyResponse->orderPossible) ? $this->response->checkOrderPolicyResponse->orderPossible->{'$'} : FALSE;
-    return ($bool === 'TRUE' || $bool === true || $bool === '1');
+    return ($bool === 'TRUE' || $bool === "true" || $bool === '1');
   }
 
   public function getOrderPossibleReason() {
