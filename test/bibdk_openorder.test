@@ -24,7 +24,7 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
 
   public function testOrderPolicy(){
     $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
-    $this->assertFalse($policy, 'Order is not possible');
+     $this->assertFalse($policy, 'Order is not possible');
   }
 
   public function testOrderPossibleReason() {
@@ -35,6 +35,31 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
   public function testUrlAvailablity(){
     $url = BibdkOpenorderPolicyResponse::GetObject()->getLookUpUrl();
     $this->assertNotNull($url, 'URL is available: ' . $url);
+  }
+  
+  public function testOrderPolicyOk(){
+    $file = file_get_contents(drupal_get_path('module', 'bibdk_openorder') . '/test/bibdk_orderpolicy_test_bool.json');
+    $response = json_decode($file);
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[0]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertTrue($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[1]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertTrue($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[2]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertTrue($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[3]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertFalse($policy, 'Order is possible');
+
+    BibdkOpenorderPolicyResponse::GetObject()->setResponse($response[4]);
+    $policy = BibdkOpenorderPolicyResponse::GetObject()->getOrderPossible();
+    $this->assertFalse($policy, 'Order is possible');
   }
 
   private function _createPolicyObject() {
