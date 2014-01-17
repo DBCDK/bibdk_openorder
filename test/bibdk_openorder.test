@@ -31,7 +31,14 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
    
     $this->assertTrue(empty($missing),'all parameters checked out');
     
-    $values = array('copy','exactEdition','needBeforeDate','orderSystem','userIdAuthenticated','userId','verificationReferenceSource');
+    $values = array('copy'=>'hest',
+      'exactEdition'=>'hest',
+      'needBeforeDate'=>'hest'
+      ,'orderSystem'=>'hest',
+      'userIdAuthenticated'=>'hest',
+      'userId'=>'hest',
+      'verificationReferenceSource'=>'hest');
+    
     $missing = _bibdk_openorder_check_required_params($values);
     $this->assertTrue(in_array('action',$missing),'action missing in required params');
   }
