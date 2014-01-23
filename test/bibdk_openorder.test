@@ -14,7 +14,8 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
 
   public function setUp() {
     $this->_createPolicyObject();
-    parent::setUp('bibdk_openorder');
+    parent::setup();
+    module_load_include('module', 'bibdk_openorder');
   }
   
   // checck _bibdk_openorder_check_required_params method
