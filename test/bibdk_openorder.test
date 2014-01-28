@@ -14,7 +14,34 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
 
   public function setUp() {
     $this->_createPolicyObject();
-    parent::setUp('bibdk_openorder');
+    parent::setup();
+    module_load_include('module', 'bibdk_openorder');
+  }
+  
+  // checck _bibdk_openorder_check_required_params method
+  public function testRequiredParamsMethod(){
+    $values = array('copy'=>'hest',
+      'exactEdition'=>'hest',
+      'needBeforeDate'=>'hest'
+      ,'orderSystem'=>'hest',
+      'userIdAuthenticated'=>'hest',
+      'userId'=>'hest',
+      'verificationReferenceSource'=>'hest',
+      'action'=>'hest');
+    $missing = _bibdk_openorder_check_required_params($values);
+   
+    $this->assertTrue(empty($missing),'all parameters checked out');
+    
+    $values = array('copy'=>'hest',
+      'exactEdition'=>'hest',
+      'needBeforeDate'=>'hest'
+      ,'orderSystem'=>'hest',
+      'userIdAuthenticated'=>'hest',
+      'userId'=>'hest',
+      'verificationReferenceSource'=>'hest');
+    
+    $missing = _bibdk_openorder_check_required_params($values);
+    $this->assertTrue(in_array('action',$missing),'action missing in required params');
   }
 
   public function testAgencyId(){

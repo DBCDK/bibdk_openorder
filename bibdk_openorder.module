@@ -5,11 +5,33 @@ function bibdk_openorder_do_placeOrder($params) {
   $additional = _bibdk_openorder_set_fixed_placeorder_params();
   $params = array_merge($additional, $params);
   $params['action'] = 'placeOrderRequest';
-  $client = new ting_client_class();
-  $response = $client->do_request('openorder', $params);
 
-  return $response;
+  $missing = _bibdk_openorder_check_required_params($params);
+  if (empty($missing)) {
+    $client = new ting_client_class();
+    $response = $client->do_request('openorder', $params);
+
+    return $response;
+  }
+  else {
+    $message = t('a required parameter is missing in placeorder request - please contact system administrator if problem persists');
+    drupal_set_message($message, 'warning');
+    watchdog('openorder', $message.'%values', array('%values'=>implode(', ',$missing)), WATCHDOG_ERROR);
+  }
 }
+
+function _bibdk_openorder_check_required_params($params){
+  $required = array('copy','exactEdition','needBeforeDate','orderSystem','userIdAuthenticated','userId','verificationReferenceSource','action');
+  $missing = array();
+  foreach($required as $value){
+    if(!array_key_exists($value, $params)){
+      $missing[] = $value;
+    }
+  }
+  return $missing;
+}
+
+
 
 function _bibdk_openorder_set_fixed_placeorder_params() {
   // @TODO; is this value fixed?? or should we get it from somewhere else .. openagency maybe
@@ -61,12 +83,10 @@ function bibdk_openorder_do_checkOrderPolicy($pickupAgencyId, $pid) {
   return $orderpolicy;
 }
 
-
 /**
  * do a incrementRedirectStat
  *
  * */
-
 function bibdk_openorder_do_incrementRedirectStat($agencyid) {
   $params = _bibdk_openorder_set_fixed_parameters();
   $params['action'] = 'incrementRedirectStatRequest';
@@ -77,16 +97,13 @@ function bibdk_openorder_do_incrementRedirectStat($agencyid) {
   $client = new ting_client_class();
   $response = $client->do_request('openorder', $params);
 
-  if (!isset($response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'}) || $response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'} === 'false'){
-    watchdog('openOrder', 'Could not register incrementRedirectStat for agency : @agencyID', array('@agencyID' => $agencyid),  WATCHDOG_ERROR);
+  if (!isset($response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'}) || $response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'} === 'false') {
+    watchdog('openOrder', 'Could not register incrementRedirectStat for agency : @agencyID', array('@agencyID' => $agencyid), WATCHDOG_ERROR);
     return false;
   }
 
   return true;
 }
-
-
-
 
 /**
  * parameters common for all request
