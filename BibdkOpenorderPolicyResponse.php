@@ -16,15 +16,16 @@ class BibdkOpenorderPolicyResponse {
   }
 
   public function getLookUpUrl() {
-    if (!isset($this->lookUpUrl) && isset($this->response->checkOrderPolicyResponse->lookUpUrl)) {
-      $result = $this->parseFields($this->response->checkOrderPolicyResponse, array('lookUpUrl'));
-      $this->lookUpUrls = (is_array($result)) ? reset($result) : $result;
+    $urls = array();
+    if (isset($this->response->checkOrderPolicyResponse->lookUpUrl)) {
+      foreach($this->response->checkOrderPolicyResponse->lookUpUrl as $lookup_url){
+        $urls[] = array(
+          'url' => isset($lookup_url->{'$'}) ? $lookup_url->{'$'} : NULL,
+          'agencyId' => isset($lookup_url->{'@agencyId'}->{'$'}) ? $lookup_url->{'@agencyId'}->{'$'} : NULL,
+        );
+      }
     }
-    return (is_array($this->lookUpUrls)) ? reset($this->lookUpUrls) : $this->lookUpUrls;
-  }
-
-  public function getLookUpUrls($id = 0) {
-    return $this->lookUpUrls[$id];
+    return $urls;
   }
 
   public function getOrderPossible() {
