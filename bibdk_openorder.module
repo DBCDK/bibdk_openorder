@@ -37,7 +37,7 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   // @TODO; is this value fixed?? or should we get it from somewhere else .. openagency maybe
   $params['copy'] = 'false';
   // @TODO; is this value fixed?? or should we get it from somewhere else .. openagency maybe
-  $params['exactEdition'] = 'true';
+  //$params['exactEdition'] = 'true';
   // @TODO; get this value from userinput
   //$params['needBeforeDate'] = date('d-m-YTH:i:s', strtotime('now+3 months'));
   // @TODO; this value is the same as service_requester --- is it always so ?? or should it be set in config ??
