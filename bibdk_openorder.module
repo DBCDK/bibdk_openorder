@@ -21,7 +21,7 @@ function bibdk_openorder_do_placeOrder($params) {
 }
 
 function _bibdk_openorder_check_required_params($params){
-  $required = array('copy','exactEdition','needBeforeDate','orderSystem','userIdAuthenticated','userId','verificationReferenceSource','action');
+  $required = array('copy','needBeforeDate','orderSystem','userIdAuthenticated','userId','verificationReferenceSource','action');
   $missing = array();
   foreach($required as $value){
     if(!array_key_exists($value, $params)){
