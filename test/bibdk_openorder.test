@@ -21,7 +21,6 @@ class BibdkOpenOrderUnitTestCase extends DrupalUnitTestCase {
   // checck _bibdk_openorder_check_required_params method
   public function testRequiredParamsMethod() {
     $values = array('copy' => 'hest',
-      'exactEdition' => 'hest',
       'needBeforeDate' => 'hest'
     , 'orderSystem' => 'hest',
       'userIdAuthenticated' => 'hest',
