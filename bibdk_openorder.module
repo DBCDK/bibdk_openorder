@@ -129,6 +129,7 @@ function bibdk_openorder_ting_client_webservice() {
   $ret = array();
   $ret['openorder']['class'] = 'bibdk_openorder';
   $ret['openorder']['url'] = 'bibdk_openorder_url';
+  $ret['openorder']['xsd_url'] = 'bibdk_openorder_xsd_url';
   $ret['openorder']['xsdNamespace'] = array(0 => 'http://oss.dbc.dk/ns/openorder');
   // return array('openorder' => 'bibdk_openorder_url',);
   return $ret;
@@ -150,12 +151,15 @@ function bibdk_openorder_how_r_u() {
  * @url to openorder
  * */
 function bibdk_openorder_form_ting_client_admin_webservices_settings_alter(&$form, &$form_state) {
-  $form['openorder'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Openorder settings'),
-    '#description' => t('Setting for openorder webservice'),
-    '#weight' => -2,
-  );
+
+  // don't start by defining the fieldset as an array. This way other modules can extend the fieldset.
+  $form['openorder']['#type'] = 'fieldset';
+  $form['openorder']['#title'] = t('OpenOrder settings');
+  $form['openorder']['#description'] = t('Setting for openorder webservice');
+  $form['openorder']['#collapsible'] = TRUE;
+  $form['openorder']['#collapsed'] = FALSE;
+  $form['openorder']['#tree'] = FALSE;
+  $form['openorder']['#weight'] = -2;
 
   $form['openorder']['bibdk_openorder_url'] = array(
     '#type' => 'textfield',
@@ -163,6 +167,14 @@ function bibdk_openorder_form_ting_client_admin_webservices_settings_alter(&$for
     '#description' => t('URL to openorder e.g. http://openorder.addi.dk/2.2/'),
     '#required' => TRUE,
     '#default_value' => variable_get('bibdk_openorder_url', FALSE),
+  );
+
+  $form['openorder']['bibdk_openorder_xsd_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Openorder XSD URL'),
+    '#description' => t('URL to openorder e.g. https://openorder.addi.dk/x.x/openorder.xsd'),
+    '#required' => TRUE,
+    '#default_value' => variable_get('bibdk_openorder_xsd_url', FALSE),
   );
 
   $form['openorder']['bibdk_openorder_groupIdAut'] = array(
