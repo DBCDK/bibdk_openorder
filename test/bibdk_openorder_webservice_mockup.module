@@ -9,6 +9,10 @@ function bibdk_openorder_webservice_mockup_menu() {
     'page callback' => 'bibdk_openorder_webservice_mockup_request',
     'access callback' => TRUE,
   );
+  $items['bibdk_openorder_webservice/xsd'] = array(
+    'page callback' => 'bibdk_openorder_webservice_mockup_request_xsd',
+    'access callback' => TRUE,
+  );
   $items['bibdk_openorder_webservice/test'] = array(
     'page callback' => 'bibdk_openorder_webservice_mockup_test',
     'access callback' => TRUE,
@@ -55,6 +59,18 @@ function bibdk_openorder_webservice_mockup_request() {
   } catch (Exception $e) {
     return SOAP_FAULT;
   }
+}
+
+
+/**
+ * Faking the request and returns result.
+ * @return String json
+ */
+function bibdk_openorder_webservice_mockup_request_xsd() {
+  $path = drupal_get_path('module', 'bibdk_openorder');
+  $file = file_get_contents($path.'/test/openorder.xsd');
+  print $file;
+  exit;
 }
 
 function bibdk_openorder_webservice_placeOrderRequest($request){
