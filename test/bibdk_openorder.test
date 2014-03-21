@@ -195,17 +195,20 @@ class BibdkOpenOrderWebTestCase extends DrupalWebTestCase {
 
     // The Stats have been updated
     $result = bibdk_openorder_do_incrementRedirectStat('1111');
-    $this->assertTrue($result);
+    $this->assertTrue($result, 'Valid number have been updated');
 
     // The stats have not been updated
     $result = bibdk_openorder_do_incrementRedirectStat(null);
-    $this->assertFalse($result);
+    $this->assertFalse($result, 'Invalid number have not been updated');
 
     // log have been added to watchdog
-    $query = db_select('watchdog', 'w')->fields('w', array('message'))->orderBy('wid', 'desc')->range(0, 1);
+    $query = db_select('watchdog', 'w')
+      ->fields('w', array('message'))
+      ->orderBy('wid', 'desc')
+      ->range(0, 1);
     $result = $query->execute();
     $record = $result->fetchAssoc();
-    $this->assertEqual($record['message'], 'Could not register incrementRedirectStat for agency : @agencyID');
+    $this->assertEqual($record['message'], 'Could not register incrementRedirectStat for agency : @agencyID', 'Log have been added to watchdog');
 
   }
 
