@@ -181,7 +181,7 @@ class BibdkOpenOrderWebTestCase extends DrupalWebTestCase {
     menu_rebuild();
     parent::setUp(array('bibdk_openorder', 'bibdk_openorder_webservice_mockup'));
     variable_set('bibdk_openorder_url', $this->getAbsoluteUrl('bibdk_openorder_webservice'));
-    variable_set('open_holdingstatus_xsd_url', $this->getAbsoluteUrl('/open_holdingstatus_webservice/xsd'));
+    variable_set('open_holdingstatus_xsd_url', $this->getAbsoluteUrl('/open_holdingstatus_webservice/openagency.xsd'));
   }
 
   public function tearDown() {
