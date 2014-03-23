@@ -9,7 +9,7 @@ function bibdk_openorder_webservice_mockup_menu() {
     'page callback' => 'bibdk_openorder_webservice_mockup_request',
     'access callback' => TRUE,
   );
-  $items['bibdk_openorder_webservice/xsd'] = array(
+  $items['bibdk_openorder_webservice/openorder_xsd'] = array(
     'page callback' => 'bibdk_openorder_webservice_mockup_request_xsd',
     'access callback' => TRUE,
   );

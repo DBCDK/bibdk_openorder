@@ -97,7 +97,10 @@ function bibdk_openorder_do_incrementRedirectStat($agencyid) {
   $client = new ting_client_class();
   $response = $client->do_request('openorder', $params);
 
-  if (!isset($response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'}) || $response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'} === 'false') {
+  if (
+    !isset($response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'}) || 
+    $response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'} === 'false')
+  {
     watchdog('openOrder', 'Could not register incrementRedirectStat for agency : @agencyID', array('@agencyID' => $agencyid), WATCHDOG_ERROR);
     return false;
   }
