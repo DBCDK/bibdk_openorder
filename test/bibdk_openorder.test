@@ -181,6 +181,7 @@ class BibdkOpenOrderWebTestCase extends DrupalWebTestCase {
     menu_rebuild();
     parent::setUp(array('bibdk_openorder', 'bibdk_openorder_webservice_mockup'));
     variable_set('bibdk_openorder_url', $this->getAbsoluteUrl('bibdk_openorder_webservice'));
+    variable_set('bibdk_openorder_xsd_url', $this->getAbsoluteUrl('bibdk_openorder_webservice/openorder_xsd'));
   }
 
   public function tearDown() {
@@ -188,24 +189,25 @@ class BibdkOpenOrderWebTestCase extends DrupalWebTestCase {
     module_disable(array('bibdk_openorder_webservice_mockup'));
   }
 
-
   public function testIncrementRedirectStatTrue() {
     module_load_include('module', 'bibdk_openorder', 'bibdk_openorder');
 
-
     // The Stats have been updated
     $result = bibdk_openorder_do_incrementRedirectStat('1111');
-    $this->assertTrue($result);
+    $this->assertTrue($result, 'Valid number have been updated');
 
     // The stats have not been updated
     $result = bibdk_openorder_do_incrementRedirectStat(null);
-    $this->assertFalse($result);
+    $this->assertFalse($result, 'Invalid number have not been updated');
 
     // log have been added to watchdog
-    $query = db_select('watchdog', 'w')->fields('w', array('message'))->orderBy('wid', 'desc')->range(0, 1);
+    $query = db_select('watchdog', 'w')
+      ->fields('w', array('message'))
+      ->orderBy('wid', 'desc')
+      ->range(0, 1);
     $result = $query->execute();
     $record = $result->fetchAssoc();
-    $this->assertEqual($record['message'], 'Could not register incrementRedirectStat for agency : @agencyID');
+    $this->assertEqual($record['message'], 'Could not register incrementRedirectStat for agency : @agencyID', 'Log have been added to watchdog');
 
   }
 
