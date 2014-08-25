@@ -57,7 +57,7 @@ function bibdk_openorder_do_checkArticleDeliveryRequest($pid) {
   $params['pid'] = $pid;
   $params['outputType'] = 'xml';
   $client = new ting_client_class();
-  $response = $client->do_openorder($params);
+  $response = $client->do_request('openorder', $params);
 
   return $response;
 }
