@@ -14,7 +14,7 @@ function bibdk_openorder_do_placeOrder($params) {
     return $response;
   }
   else {
-    $message = t('a required parameter is missing in placeorder request - please contact system administrator if problem persists');
+    $message = t('a required parameter is missing in placeorder request - please contact system administrator if problem persists' , array(), array('context' => 'bibdk_openorder'));
     drupal_set_message($message, 'warning');
     watchdog('openorder', $message.'%values', array('%values'=>implode(', ',$missing)), WATCHDOG_ERROR);
   }
@@ -42,8 +42,8 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   //$params['needBeforeDate'] = date('d-m-YTH:i:s', strtotime('now+3 months'));
   // @TODO; this value is the same as service_requester --- is it always so ?? or should it be set in config ??
   $params['orderSystem'] = 'bibliotekdk';
-  // @TODO; get this value from openagency -- not yet implemented
-  $params['userIdAuthenticated'] = 'true';
+  // Get userIdAuthenticated value from borcheck. Default 'false'
+  $params['userIdAuthenticated'] = 'false';
   // @TODO; get this value from openagency -- not yet implemented
   //$params['userIdType'] = 'optional'; //BibdkReservationOrderObject::GetObject()->getFields()->getUserIdKey();
   // @TODO this value should probably be set in config -- ask somebody
