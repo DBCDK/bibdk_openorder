@@ -17,14 +17,35 @@ function _bibdk_openorder_demo_form_checkArticleDelivery(&$form) {
     '#value' => 'Foo',
   );
 
-  $form['wrapper']['form']['lead']['agencyId'] = array(
+  $form['wrapper']['form']['lead']['pid']['#tree'] = TRUE;
+
+  $form['wrapper']['form']['lead']['pid'][] = array(
     '#type' => 'textfield', 
-    '#title' => t('agencyId'), 
-    '#default_value' => '100400', 
+    '#title' => t('PID'), 
+    '#default_value' => '870971-avis:89724244', 
     '#size' => 60, 
     '#maxlength' => 128, 
     '#required' => TRUE,
   );
+
+  $form['wrapper']['form']['lead']['pid'][] = array(
+    '#type' => 'textfield', 
+    '#title' => t('PID'), 
+    '#default_value' => '870971-tsart:73355842', 
+    '#size' => 60, 
+    '#maxlength' => 128, 
+    '#required' => TRUE,
+  );
+
+  $form['wrapper']['form']['lead']['pid'][] = array(
+    '#type' => 'textfield', 
+    '#title' => t('PID'), 
+    '#default_value' => '870971-tsart:36253215', 
+    '#size' => 60, 
+    '#maxlength' => 128, 
+    '#required' => TRUE,
+  );
+
 
   $form['wrapper']['form']['result']['header'] = array(
     '#type'  => 'html_tag',
@@ -43,37 +64,57 @@ function _bibdk_openorder_demo_form_checkArticleDelivery(&$form) {
  */
 function _bibdk_openorder_ajax_submit_checkArticleDelivery(&$form, $form_state) {
 
-  $increment = bibdk_openorder_do_incrementRedirectStat($form_state['values']['agencyId']);
+  $results = array();
+
+  foreach ($form_state['values']['pid'] as $n => $pid){
+
+    $response[$n] = bibdk_openorder_do_checkArticleDeliveryRequest($pid);
+
+    $articleDeliveryPossible = FALSE;
+    if ( isset($response[$n]->checkArticleDeliveryResponse->articleDeliveryPossible) ) {
+      $articleDeliveryPossible = $response[$n]->checkArticleDeliveryResponse->articleDeliveryPossible->{'$'};
+    }
+    $results[$n]['articleDeliveryPossible'] = 'articleDeliveryPossible: ' . (($articleDeliveryPossible) ? 'true' : 'false');
+
+    $articleDeliveryPossibleReason = NULL;
+    if ( isset($response[$n]->checkArticleDeliveryResponse->articleDeliveryPossibleReason) ) {
+      $articleDeliveryPossibleReason = $response[$n]->checkArticleDeliveryResponse->articleDeliveryPossibleReason->{'$'};
+    }
+    $results[$n]['articleDeliveryPossibleReason'] = 'articleDeliveryPossibleReason: ' . (($articleDeliveryPossibleReason) ? $articleDeliveryPossibleReason : 'NULL');
+
+    $articleDirect = NULL;
+    if ( isset($response[$n]->checkArticleDeliveryResponse->articleDirect) ) {
+      $articleDirect = $response[$n]->checkArticleDeliveryResponse->articleDirect->{'$'};
+    }
+    $results[$n]['articleDirect'] = 'articleDirect: ' . (($articleDirect) ? $articleDirect : 'NULL');
+
+  }
+
+  foreach ($results as $n => $result) {
+    $results[$n] = implode('<br>', $results[$n]);
+  }
+
+  $form['wrapper']['form']['result']['#attributes']['class'][] = 'article-delivery-response';
 
   $form['wrapper']['form']['result']['text'] = array(
     '#type'  => 'html_tag',
-    '#tag'   => 'p',
-    '#value' => 'incrementRedirectStat: ' . (($increment) ? 'true' : 'false'),
+    '#tag'   => 'div',
+    '#value' => implode('</div><div>', $results),
   );
 
   $form['wrapper']['object']['text'] = array(
     '#type'  => 'html_tag',
     '#tag'   => 'pre',
-    '#value' => '',
+    '#value' => print_r($response, 1),
   );
 
   return $form;
+
 }
 
 
-/*
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:open="http://oss.dbc.dk/ns/openorder">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <open:incrementRedirectStatRequest>
-         <open:authentication>
-            <open:groupIdAut>?</open:groupIdAut>
-            <open:passwordAut>?</open:passwordAut>
-            <open:userIdAut>?</open:userIdAut>
-         </open:authentication>
-         <open:agencyId>100400</open:agencyId>
-         <open:outputType>json</open:outputType>
-      </open:incrementRedirectStatRequest>
-   </soapenv:Body>
-</soapenv:Envelope>
-*/
+/**
+ * Notes:
+ * bibdk_sbkopi_ajax_parse_response() : move to bibdk_openorder?
+ * _bibdk_sbkopi_set_xpath() : move to bibdk_openorder?
+ */

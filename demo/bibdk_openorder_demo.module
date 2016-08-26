@@ -144,6 +144,7 @@ function bibdk_openorder_demo_form($form, &$form_state, $param) {
       .ding-modal-demo-column-middle { width: 20%; text-align: center}
       .ding-modal-demo-column-right { width: 50%;}
       .bibdk-openorder-object { font-size: small; }
+      .article-delivery-response > div { margin-bottom: 1em; }
       #bibdk-openorder-demo-form .item-list ul li { margin: 0; padding: 0.25em 1em; outline: 1px solid #999; background-color: #ddd; }
 
     ',

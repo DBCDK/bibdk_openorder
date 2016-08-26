@@ -51,6 +51,14 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   return $params;
 }
 
+
+/**
+ * do a checkArticleDeliveryRequest
+ * - bibdk_sbkopi may need rework: looks like it expect XML response.
+ *
+ * return stdObject
+ *
+ * */
 function bibdk_openorder_do_checkArticleDeliveryRequest($pid) {
   $params = _bibdk_openorder_set_fixed_parameters();
   $params['action'] = 'checkArticleDeliveryRequest';
