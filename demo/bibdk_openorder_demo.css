@@ -5,6 +5,5 @@ version = 7.x-0.19
 package = Bibliotek.dk
 files[] = bibdk_openorder.request.inc
 files[] = BibdkOpenorderPolicyResponse.php
-files[] = test/bibdk_openorder_unit_test.test
-files[] = test/bibdk_openorder_web_test.test
+files[] = test/bibdk_openorder.test
 dependencies[] = ting_client

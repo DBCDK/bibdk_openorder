@@ -1,7 +1,8 @@
 <?php
 
 function bibdk_openorder_do_placeOrder($params) {
-  $params += _bibdk_openorder_set_fixed_parameters();
+  $fixed_parameters = _bibdk_openorder_set_fixed_parameters();
+  $params += $fixed_parameters;
   $additional = _bibdk_openorder_set_fixed_placeorder_params();
   $params = array_merge($additional, $params);
   $params['action'] = 'placeOrderRequest';
@@ -10,7 +11,6 @@ function bibdk_openorder_do_placeOrder($params) {
   if (empty($missing)) {
     $client = new ting_client_class();
     $response = $client->do_request('openorder', $params);
-
     return $response;
   }
   else {
@@ -55,7 +55,6 @@ function bibdk_openorder_do_checkArticleDeliveryRequest($pid) {
   $params = _bibdk_openorder_set_fixed_parameters();
   $params['action'] = 'checkArticleDeliveryRequest';
   $params['pid'] = $pid;
-  $params['outputType'] = 'xml';
   $client = new ting_client_class();
   $response = $client->do_request('openorder', $params);
 
@@ -119,6 +118,7 @@ function _bibdk_openorder_set_fixed_parameters() {
   $params['authentication'] = $authentication;
 
   $params['serviceRequester'] = variable_get('bibdk_openorder_serviceRequester');
+  $params['outputType'] = 'json';
 
   return $params;
 }

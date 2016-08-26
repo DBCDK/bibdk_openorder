@@ -1,0 +1,229 @@
+<?php
+
+/**
+ * @file
+ * Bibdk OpenOrder Demo module
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function bibdk_openorder_demo_menu() {
+
+  $items['bibdk_openorder_demo'] = array(
+    'title' => 'bibdk_openorder demo',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('bibdk_openorder_demo_form', 'checkOrderPolicyRequest'),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('administer site configuration'),
+  );
+
+  $items['bibdk_openorder_demo/%'] = array(
+    'title' => 'bibdk_openorder demo : checkOrderPolicyRequest',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('bibdk_openorder_demo_form', 1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+
+}
+
+
+/**
+ * OpenOrder Demo form.
+ */
+function bibdk_openorder_demo_form($form, &$form_state, $param) {
+
+  $nav_items = array(
+    'checkOrderPolicyRequest',
+    'incrementRedirectStatRequest',
+    'placeOrderRequest',
+    'checkArticleDeliveryRequest'
+  );
+
+  foreach ($nav_items as $item) {
+    $link = array(
+      '#type'  => 'link',
+      '#title' => $item,
+      '#href'  => 'bibdk_openorder_demo/' . $item,
+      '#options' => array('attributes' => array('title' => 'Test ' . $item)),
+      '#prefix' => '<span>',
+      '#suffix' => '</span>'
+    );
+    $nav[] = array('data' => drupal_render($link));
+  }
+
+  $form['param'] = array(
+    '#type' => 'hidden',
+    '#value' => $param, 
+  );
+
+  $form['wrapper'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'id' => 'bibdk-openorder-demo-form',
+      'class' => array('ding-modal-demo clearfix'),
+    ),
+  );
+
+  $form['wrapper']['nav'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('clearfix'),
+    ),
+    'list' => array(
+      '#theme' => 'item_list',
+      '#type' => 'ul',
+      '#items' => $nav,
+      '#attributes' => array(
+        'class' => array('nav--horizontal'),
+      ),
+    ),
+  );
+
+  $form['wrapper']['form'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('clearfix'),
+    ),
+  );
+
+  $form['wrapper']['form']['lead'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('ding-modal-demo-column-left', 'clearfix'),
+    ),
+  );
+
+  $form['wrapper']['form']['action'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('ding-modal-demo-column-middle'),
+    ),
+  );
+
+  $form['wrapper']['form']['action']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update'),
+    '#ajax' => array(
+      'callback' => 'bibdk_openorder_ajax_submit',
+      'wrapper' => 'bibdk-openorder-demo-form',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+  );
+
+  $form['wrapper']['form']['result'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('ding-modal-demo-column-right'),
+    ),
+  );
+
+  $form['wrapper']['form']['result']['text'] = array(
+    '#type'  => 'html_tag',
+    '#tag'   => 'p',
+    '#value' => '',
+  );
+
+  $form['wrapper']['object'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('bibdk-openorder-object', 'clearfix'),
+    ),
+  );
+
+  $form['#attached']['css'][] = array(
+    'data' => '
+      .ding-modal-demo-column-left, .ding-modal-demo-column-middle, .ding-modal-demo-column-right { float: left;}
+      .ding-modal-demo-column-left { width: 30%;}
+      .ding-modal-demo-column-middle { width: 20%; text-align: center}
+      .ding-modal-demo-column-right { width: 50%;}
+      .bibdk-openorder-object { font-size: small; }
+      #bibdk-openorder-demo-form .item-list ul li { margin: 0; padding: 0.25em 1em; outline: 1px solid #999; background-color: #ddd; }
+
+    ',
+    'type' => 'inline',
+  );
+
+  switch ($param) {
+    case 'checkOrderPolicyRequest':
+      require_once('includes/bibdk_openorder_demo.checkOrderPolicyRequest.inc');
+      _bibdk_openorder_demo_form_checkOrderPolicyRequest($form);
+      break;
+    case 'incrementRedirectStatRequest':
+      require_once('includes/bibdk_openorder_demo.incrementRedirectStatRequest.inc');
+      _bibdk_openorder_demo_form_incrementRedirectStatRequest($form);
+      break;
+    case 'placeOrderRequest':
+      require_once('includes/bibdk_openorder_demo.placeOrderRequest.inc');
+      _bibdk_openorder_demo_form_placeOrderRequest($form);
+      break;
+    case 'checkArticleDeliveryRequest':
+      require_once('includes/bibdk_openorder_demo.checkArticleDeliveryRequest.inc');
+      _bibdk_openorder_demo_form_checkArticleDelivery($form);
+      break;
+    default:
+      require_once('includes/bibdk_openorder_demo.checkOrderPolicyRequest.inc');
+      _bibdk_openorder_demo_form_checkOrderPolicyRequest($form);
+  } 
+
+  return $form;
+
+}
+
+
+/**
+ * Ajax submit function.
+ */
+function bibdk_openorder_ajax_submit($form, $form_state) {
+
+  # "common parameters"
+  $error = FALSE;
+  $params['groupIdAut']       = variable_get('bibdk_openorder_groupIdAut', NULL);
+  $params['passwordAut']      = variable_get('bibdk_openorder_passwordAut', NULL);
+  $params['userIdAut']        = variable_get('bibdk_openorder_userIdAut', NULL);
+  $params['serviceRequester'] = variable_get('bibdk_openorder_serviceRequester', NULL);
+  foreach ($params as $key => $param) {
+    if ($param == NULL) {
+      $error = TRUE;
+      $error_text[] = 'Variable ' . $key . ' is not set.';
+    }
+  }
+  if ($error == TRUE) {
+    $form['wrapper']['result']['text'] = array(
+      '#type'  => 'html_tag',
+      '#tag'   => 'p',
+      '#value' => implode('<br/>', $error_text),
+    );
+    return $form;
+  }
+
+  switch ($form_state['values']['param']) {
+    case 'checkOrderPolicyRequest':
+      require_once('includes/bibdk_openorder_demo.checkOrderPolicyRequest.inc');
+      _bibdk_openorder_ajax_submit_checkOrderPolicy($form, $form_state);
+      break;
+    case 'incrementRedirectStatRequest':
+      require_once('includes/bibdk_openorder_demo.incrementRedirectStatRequest.inc');
+      _bibdk_openorder_ajax_submit_incrementRedirectStat($form, $form_state);
+      break;
+    case 'placeOrderRequest':
+      require_once('includes/bibdk_openorder_demo.placeOrderRequest.inc');
+      _bibdk_openorder_ajax_submit_placeOrderRequest($form, $form_state);
+      break;
+    case 'checkArticleDeliveryRequest':
+      require_once('includes/bibdk_openorder_demo.checkArticleDeliveryRequest.inc');
+      _bibdk_openorder_ajax_submit_checkArticleDelivery($form, $form_state);
+      break;
+    default:
+      require_once('includes/bibdk_openorder_demo.checkOrderPolicyRequest.inc');
+      _bibdk_openorder_ajax_submit_checkOrderPolicy($form, $form_state);
+  }
+
+  return $form;
+}

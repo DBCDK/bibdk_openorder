@@ -2,6 +2,8 @@
 
 class bibdk_openorder extends TingClientRequest {
 
+  /* to be deleted */
+
   // attributes for checkOrderPolicyRequest
   protected $serviceRequester;
   protected $authentication;
@@ -500,10 +502,20 @@ class bibdk_openorder extends TingClientRequest {
     return $this->pid;
   }
 
-  // empty;
-  public function processResponse(stdClass $result) {
-    return $result;
+  /* end: to be deleted */
+
+  public function processResponse(stdClass $response) {
+    return $response;
   }
+
+  public function cacheEnable($value = null) {
+    return variable_get(get_class($this) . TingClientRequest::CACHEENABLE, TRUE);
+  }
+
+  public function cacheTimeout($value = null) {
+    return variable_get(get_class($this) . TingClientRequest::CACHELIFETIME, '10');
+  }
+
 
 }
 
