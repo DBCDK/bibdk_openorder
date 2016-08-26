@@ -14,7 +14,7 @@ function _bibdk_openorder_demo_form_placeOrderRequest(&$form) {
   $form['wrapper']['form']['lead']['text'] = array(
     '#type'  => 'html_tag',
     '#tag'   => 'p',
-    '#value' => 'Make a reservation for user nn in ',
+    '#value' => 'Make a reservation for material PID for user NN in pickUpAgency.',
   );
 
   $form['wrapper']['form']['lead']['copy'] = array(

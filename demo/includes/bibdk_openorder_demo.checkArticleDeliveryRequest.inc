@@ -14,7 +14,7 @@ function _bibdk_openorder_demo_form_checkArticleDelivery(&$form) {
   $form['wrapper']['form']['lead']['text'] = array(
     '#type'  => 'html_tag',
     '#tag'   => 'p',
-    '#value' => 'Foo',
+    '#value' => 'check if the article can be delivered electronically.',
   );
 
   $form['wrapper']['form']['lead']['pid']['#tree'] = TRUE;

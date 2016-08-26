@@ -14,7 +14,7 @@ function _bibdk_openorder_demo_form_checkOrderPolicyRequest(&$form) {
   $form['wrapper']['form']['lead']['text'] = array(
     '#type'  => 'html_tag',
     '#tag'   => 'p',
-    '#value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    '#value' => 'Check if the material can be ordered.',
   );
 
   $form['wrapper']['form']['lead']['pid'] = array(
