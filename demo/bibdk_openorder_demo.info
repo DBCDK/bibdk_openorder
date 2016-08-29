@@ -1,0 +1,6 @@
+name = Bibliotek.dk - Openorder demonstration
+description = Demonstrate how to handle request to openorder webservice.
+core = 7.x
+version = 7.x-0.1
+package = Bibliotek.dk
+dependencies[] = bibdk_openorder
