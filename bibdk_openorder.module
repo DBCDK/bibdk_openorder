@@ -105,10 +105,10 @@ function bibdk_openorder_do_incrementRedirectStat($agencyid) {
   $response = $client->do_request('openorder', $params);
 
   if (
-    !isset($response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'}) || 
+    !isset($response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'}) ||
     $response->incrementRedirectStatResponse->incrementRedirectStatStatus->{'$'} === 'false')
   {
-    watchdog('openOrder', 'Could not register incrementRedirectStat for agency : @agencyID', array('@agencyID' => $agencyid), WATCHDOG_ERROR);
+    watchdog('openOrder', 'Could not register incrementRedirectStat for agency : @agencyID', array(), WATCHDOG_ERROR);
     return false;
   }
 
