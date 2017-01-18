@@ -168,7 +168,7 @@ function bibdk_openorder_form_ting_client_admin_webservices_settings_alter(&$for
   $form['openorder']['#title'] = t('OpenOrder settings');
   $form['openorder']['#description'] = t('Setting for openorder webservice');
   $form['openorder']['#collapsible'] = TRUE;
-  $form['openorder']['#collapsed'] = FALSE;
+  $form['openorder']['#collapsed'] = TRUE;
   $form['openorder']['#tree'] = FALSE;
   $form['openorder']['#weight'] = -2;
 
