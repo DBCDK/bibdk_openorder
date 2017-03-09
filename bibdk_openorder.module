@@ -3,7 +3,11 @@
 function bibdk_openorder_do_placeOrder($params) {
   $fixed_parameters = _bibdk_openorder_set_fixed_parameters();
   $params += $fixed_parameters;
-  $additional = _bibdk_openorder_set_fixed_placeorder_params();
+
+  $verification = (isset($params['pid'])) ?
+    variable_get('bibdk_openorder_verification_reference_source', FALSE) :
+    'none';
+  $additional = _bibdk_openorder_set_fixed_placeorder_params($verification);
   $params = array_merge($additional, $params);
   $params['action'] = 'placeOrderRequest';
 
@@ -31,11 +35,16 @@ function _bibdk_openorder_check_required_params($params){
   return $missing;
 }
 
+  /**
+   * Set params needed when ordering.
+   * @param string $verificationReferenceSource
+   * @return array
+   */
+function _bibdk_openorder_set_fixed_placeorder_params($verificationReferenceSource = 'standard') {
 
+  if($verificationReferenceSource == 'standard')
+    $params['copy'] = 'false';
 
-function _bibdk_openorder_set_fixed_placeorder_params() {
-  // @TODO; is this value fixed?? or should we get it from somewhere else .. openagency maybe
-  $params['copy'] = 'false';
   // @TODO; is this value fixed?? or should we get it from somewhere else .. openagency maybe
   //$params['exactEdition'] = 'true';
   // @TODO; get this value from userinput
@@ -46,8 +55,12 @@ function _bibdk_openorder_set_fixed_placeorder_params() {
   $params['userIdAuthenticated'] = 'false';
   // @TODO; get this value from openagency -- not yet implemented
   //$params['userIdType'] = 'optional'; //BibdkReservationOrderObject::GetObject()->getFields()->getUserIdKey();
-  // @TODO this value should probably be set in config -- ask somebody
-  $params['verificationReferenceSource'] = variable_get('bibdk_openorder_verification_reference_source', FALSE);
+
+  $verificationReferenceSource = ($verificationReferenceSource != 'standard') ?
+    $verificationReferenceSource :
+    variable_get('bibdk_openorder_verification_reference_source', FALSE);
+
+  $params['verificationReferenceSource'] = $verificationReferenceSource;
   return $params;
 }
 
