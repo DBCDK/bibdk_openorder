@@ -453,15 +453,6 @@ class bibdk_openorder extends TingClientRequest {
     return $this->userIdType;
   }
 
-  // setters/getters for checkOrderPolicyRequest
-  public function setOutputType($value = NULL) {
-    $this->outputType = $value;
-  }
-
-  public function getOutputType() {
-    return $this->outputType;
-  }
-
   public function setAction($value = NULL) {
     $this->action = $value;
   }
